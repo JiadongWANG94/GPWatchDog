@@ -50,15 +50,12 @@ int main(int argc, char **argv) {
     }
 
     if (subcom_unregister->parsed()) {
-        RegistrationMsg msg;
-        msg.name = arg_name;
-        msg.cmd = arg_launch_cmd;
-        msg.restart_threshold = arg_restart_threshold;
-        msg.start_restrain = arg_start_restrain;
+        StringMsg msg;
+        msg.data = arg_name;
         UBusRuntime runtime;
         runtime.init("gpwd_cli", master_ip, master_port);
         ResponseMsg response;
-        runtime.call_method<RegistrationMsg, ResponseMsg>("watchdog/registration", msg, &response);
+        runtime.call_method<StringMsg, ResponseMsg>("watchdog/unregistration", msg, &response);
         std::cout << response.err_msg << std::endl;
     }
 
