@@ -1,0 +1,3 @@
+[submodule "u-bus"]
+	path = u-bus
+	url = git@github.com:JiadongWANG94/U-Bus.git

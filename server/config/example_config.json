@@ -1,0 +1,10 @@
+{
+    "processes": [
+        {
+            "name" : "my_app1",
+            "launch_method" : "/usr/bin/my_app1",
+            "restart_threshold" : 15,
+            "start_restrain" : 10
+        }
+    ]
+}
