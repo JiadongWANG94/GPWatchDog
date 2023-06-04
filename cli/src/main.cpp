@@ -2,6 +2,8 @@
  * Wang Jiadong <jiadong.wang.94@outlook.com>
  */
 
+#include <stdlib.h>
+
 #include "CLI11.hpp"
 #include "nlohmann/json.hpp"
 
@@ -115,7 +117,7 @@ int main(int argc, char **argv) {
         StringMsg msg;
         msg.data = arg_name;
         UBusRuntime runtime;
-        runtime.init("gpwd_cli", master_ip, master_port);
+        runtime.init("gpwd_cli" + std::to_string(getpid()), master_ip, master_port);
         ResponseMsg response;
         runtime.call_method<StringMsg, ResponseMsg>("watchdog/deregistration",
                                                     msg, &response);
