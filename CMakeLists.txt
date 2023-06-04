@@ -42,7 +42,7 @@ target_link_libraries(gpwd_cli
 
 # gpwd client
 add_library(gpwd_client
-    STATIC
+    SHARED
         client/src/gpwd_client.cpp)
 
 target_link_libraries(gpwd_client
@@ -54,14 +54,10 @@ target_include_directories(gpwd_client
     PUBLIC
         client/include)
 
-# target_include_directories(gpwd_server
-#     PUBLIC
-#         common/include)
+# example app
+add_executable(my_app
+    example/my_app.cpp)
 
-# add_library(gpwd_client STATIC)
-# target_link_libraries(gpwd_client
-#     PUBLIC
-#         ubus)
-
-# add_executable(gpwd_cli
-# )
+target_link_libraries(my_app
+    PUBLIC
+        gpwd_client)

@@ -23,7 +23,7 @@ class GPWDServer {
     void master_thread_worker();
     void registration_callback(const RegistrationMsg& req, ResponseMsg* resp);
     void deregistration_callback(const StringMsg& req, ResponseMsg* resp);
-    void feed_callback(const StringMsg& req, NullMsg* resp);
+    void feed_callback(const Int64Msg& req, NullMsg* resp);
     void list_callback(const NullMsg& req, StringMsg* resp);
 
  private:

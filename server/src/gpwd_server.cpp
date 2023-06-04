@@ -33,8 +33,8 @@ bool GPWDServer::init(const std::string& ip, uint64_t port) {
 }
 
 void GPWDServer::run() {
-    this->ubus_runtime_->provide_method<StringMsg, NullMsg>(
-        "watchdog/feed_endpoint", [this](const StringMsg& req, NullMsg* resp) {
+    this->ubus_runtime_->provide_method<Int64Msg, NullMsg>(
+        "watchdog/feed_endpoint", [this](const Int64Msg& req, NullMsg* resp) {
             this->feed_callback(req, resp);
         });
     this->ubus_runtime_->provide_method<RegistrationMsg, ResponseMsg>(
@@ -146,16 +146,18 @@ void GPWDServer::deregistration_callback(const StringMsg& req,
     }
 }
 
-void GPWDServer::feed_callback(const StringMsg& req, NullMsg* resp) {
+void GPWDServer::feed_callback(const Int64Msg& req, NullMsg* resp) {
+    LDEBUG(GPWDServer) << "Feed callback for pid " << std::to_string(req.data);
     std::lock_guard<std::mutex> lock(this->process_map_mtx_);
-    auto ite = this->process_map_.find(req.data);
-    if (ite != this->process_map_.end()) {
-        ite->second->current_count = 0;
-        return;
-    } else {
-        LWARN(GPWDServer) << "No such process " << req.data;
-        return;
+    for (auto& process_info : this->process_map_) {
+        if (process_info.second->process_id == req.data) {
+            process_info.second->current_count = 0;
+            return;
+        }
     }
+    LWARN(GPWDServer) << "Process with pid " << std::to_string(req.data)
+                      << " is not registered";
+    return;
 }
 
 void GPWDServer::list_callback(const NullMsg& req, StringMsg* resp) {
