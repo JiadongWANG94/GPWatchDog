@@ -37,7 +37,22 @@ target_link_libraries(gpwd_cli
     PUBLIC
         ubus
         gpwd_common
-        CLI11)
+        CLI11
+        modern-json)
+
+# gpwd client
+add_library(gpwd_client
+    STATIC
+        client/src/gpwd_client.cpp)
+
+target_link_libraries(gpwd_client
+    PUBLIC
+        ubus
+        gpwd_common)
+
+target_include_directories(gpwd_client
+    PUBLIC
+        client/include)
 
 # target_include_directories(gpwd_server
 #     PUBLIC

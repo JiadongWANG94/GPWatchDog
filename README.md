@@ -19,5 +19,5 @@ gpwd_cli register --name "my_app1" --launch_cmd "/usr/bin/my_app1" --restart_thr
 
 gpwd_cli list
 
-gpwd_clit unregister --name "my_app1"
+gpwd_clit deregister --name "my_app1"
 ```

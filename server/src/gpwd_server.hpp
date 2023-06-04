@@ -2,6 +2,7 @@
  * Wang Jiadong <jiadong.wang.94@outlook.com>
  */
 
+#include <unistd.h>
 #include <memory>
 #include <thread>
 #include <atomic>
@@ -15,25 +16,31 @@ namespace GPWD {
 
 class GPWDServer {
  public:
-    bool init(const std::string &ip, uint64_t port);
+    bool init(const std::string& ip, uint64_t port);
     void run();
 
  private:
     void master_thread_worker();
     void registration_callback(const RegistrationMsg& req, ResponseMsg* resp);
-    void unregistration_callback(const StringMsg& req, ResponseMsg* resp);
+    void deregistration_callback(const StringMsg& req, ResponseMsg* resp);
     void feed_callback(const StringMsg& req, NullMsg* resp);
-    void list_callback(const NullMsg& req, StringMsg *resp);
+    void list_callback(const NullMsg& req, StringMsg* resp);
 
  private:
     struct ProcessInfo {
         std::atomic<uint32_t> current_count = 0;
-        std::string launch_cmd;
+        std::string executable;
+        std::vector<std::string> args;
+        std::vector<std::string> envs;
         uint32_t restart_threshold = 0;
         uint32_t start_restrain = 0;
         bool is_initiating = false;
-        uint64_t process_id = 0;
+        pid_t process_id = 0;
     };
+
+ private:
+    bool launch_process(std::shared_ptr<ProcessInfo> process_info);
+    bool kill_process(std::shared_ptr<ProcessInfo> process_info);
 
  private:
     std::shared_ptr<std::thread> ubus_master_thread_;
