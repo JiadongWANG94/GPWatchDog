@@ -22,6 +22,7 @@ bool GPWDServer::init(const std::string& ip, uint64_t port) {
 
     this->ubus_master_thread_->detach();
     LDEBUG(GPWDServer) << "UBusMaster launched";
+    sleep(1);
 
     LDEBUG(GPWDServer) << "Initiating UBusRuntime";
     this->ubus_runtime_ = std::make_shared<UBusRuntime>();
